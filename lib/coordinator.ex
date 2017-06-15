@@ -1,5 +1,5 @@
 defmodule Metex.Coordinator do
-  def loop(results \\ [], results_expected) do
+  def loop(results_expected, results \\ []) do
     receive do
       {:ok, result} ->
         new_results = [result | results]
@@ -7,13 +7,13 @@ defmodule Metex.Coordinator do
         if results_expected == Enum.count(new_results) do
           send(self(), :exit)
         end
-        loop(new_results, results_expected)
+        loop(results_expected, new_results)
 
       :exit ->
-        IO.puts(results |> Enum.sort |> Enum.join(", "))
+        IO.puts(results |> Enum.sort |> Enum.join(",\n "))
 
       _ ->
-        loop(results, results_expected)
+        loop(results_expected, results)
     end
   end
 end

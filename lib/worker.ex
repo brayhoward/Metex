@@ -1,6 +1,6 @@
 defmodule Metex.Worker do
 
-  def loop do
+  def loop() do
     receive do
       {sender_pid, location} ->
         send( sender_pid, {:ok, temperature_of(location)} )
@@ -43,7 +43,7 @@ defmodule Metex.Worker do
   defp compute_temperature(json) do
 
     try do
-      # Convert temp form Kelvin to Fahrenheit
+      # Convert temp from Kelvin to Fahrenheit
       k = json["main"]["temp"]
 
       fahrenheit = (9/5 * (k - 273.15) + 32) |> Float.round(1)
